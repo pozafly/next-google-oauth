@@ -1,6 +1,11 @@
 import { useDispatch } from 'react-redux';
 import { getUserInfo } from '@/core/apis/auth.js';
-import { setAccessToken, setUser } from '@/store/slices/authSlice.js';
+import {
+  setAccessToken,
+  setUser,
+  removeUser,
+  removeAccessToken,
+} from '@/store/slices/authSlice.js';
 import { MESSAGE_TYPE } from '@/constant/auth.js';
 
 let popupWindow = null;
@@ -29,13 +34,11 @@ export const useAuth = () => {
   const dispatch = useDispatch();
 
   const messageCallback = async event => {
-    console.log('callback!!!');
     if (event.origin !== process.env.NEXT_PUBLIC_DOMAIN_URI) {
       console.error('Cross-Origin Error');
       return;
     }
     const receiveData = event.data;
-    console.log(receiveData);
     if (receiveData.type !== MESSAGE_TYPE.JIARY_SIGNIN_MESSAGE) {
       return;
     }
@@ -67,7 +70,6 @@ export const useAuth = () => {
     } else {
       popupWindow.focus();
     }
-    console.log('here');
     window.addEventListener('message', messageCallback, false);
   };
 
